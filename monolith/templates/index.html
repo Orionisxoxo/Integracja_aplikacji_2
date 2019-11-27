@@ -1,0 +1,19 @@
+<h1>Gitlab Monolith</h1>
+
+{% if current_user.is_authenticated %}
+  Hi {{ current_user.email }}! <a href="/logout">Log out</a>
+
+  {% if not current_user.gitlab_token %}
+    <a href="/create_user">Create User</a>
+  {% else %}
+    <h2>Your projects</h2>
+    {% for project in projects%}
+      <div>
+      {{project.name}}
+      </div>
+    {% endfor %}
+  {% endif %}
+
+{% else %}
+  Hi Anonymous, <a href="/login">Log in</a>
+{% endif %}
