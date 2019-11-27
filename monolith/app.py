@@ -10,8 +10,8 @@ def create_app():
     app.config['WTF_CSRF_SECRET_KEY'] = 'A SECRET KEY'
     app.config['SECRET_KEY'] = 'ANOTHER ONE'
     app.config['GITLAB_URI'] = 'https://umcs.schneiderp.ovh'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/gitlab_monolith'
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////gitlab_monolith'
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/gitlab_monolith'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///gitlab-monolith'
 
     for bp in blueprints:
         app.register_blueprint(bp)
