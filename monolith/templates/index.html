@@ -11,6 +11,12 @@
       <div>
       {{project.name}}
       </div>
+
+      <h2>Your groups</h2>
+    {% for group in groups%}
+      <div>
+      {{group.name}}
+      </div>
     {% endfor %}
   {% endif %}
 
