@@ -88,46 +88,46 @@ def fetch_all_groups():
         for user in q:
             if user.gitlab_token is None:
                 continue
-            print('Fetching Gitlab Projects for %s' % user.email)
+            print('Fetching Gitlab Groups for %s' % user.email)
             groups_fetched[user.id] = fetch_groups(user)
 
     return groups_fetched
 
 
-def group2db(user, user_project):
+def group2db(user, user_group):
     """Used by fetch_projects to convert a Gitlab user project into a DB entry.
     """
     group = Group()
-    group.user_project = user
-    group.gitlab_id = user_project.id
-    group.name = user_project.name
-    group.description = user_project.description
-    group.visibility = user_project.visibility
-    group.ssh_url_to_repo = user_project.ssh_url_to_repo
-    group.http_url_to_repo = user_project.http_url_to_repo
-    group.web_url = user_project.web_url
-    group.name_with_namespace = user_project.name_with_namespace
-    group.path = user_project.path
-    group.path_with_namespace = user_project.path_with_namespace
-    group.created_at = user_project.created_at
-    group.last_activity_at = user_project.last_activity_at
+    group.user_group = user
+    group.gitlab_id = user_group.id
+    group.name = user_group.name
+    group.description = user_group.description
+    group.visibility = user_group.visibility
+    group.ssh_url_to_repo = user_group.ssh_url_to_repo
+    group.http_url_to_repo = user_group.http_url_to_repo
+    group.web_url = user_group.web_url
+    group.name_with_namespace = user_group.name_with_namespace
+    group.path = user_group.path
+    group.path_with_namespace = user_group.path_with_namespace
+    group.created_at = user_group.created_at
+    group.last_activity_at = user_group.last_activity_at
 
     return group
 
 
 def fetch_groups(user):
     gl = gitlab.Gitlab('https://umcs.schneiderp.ovh', private_token=user.gitlab_token)
-    projects = 0
+    groups = 0
 
-    all_groups = gl.projects.list(all=True)
-    for project in all_groups:
-        q = db.session.query(Project).filter(Project.gitlab_id == project.id)
-        one_project = q.first()
+    all_groups = gl.groups.list(all=True)
+    for group in all_groups:
+        q = db.session.query(Group).filter(Group.gitlab_id == group.id)
+        one_group = q.first()
 
-        if one_project is None:
-            db.session.add(group2db(user, project))
-            projects += 1
+        if one_group is None:
+            db.session.add(group2db(user, group))
+            groups += 1
 
     db.session.commit()
-    return projects
+    return groups
 
